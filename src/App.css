@@ -1,0 +1,49 @@
+@font-face {
+  font-family: 'NASA';
+  src: url('../src/fonts/nasalization-rg.otf') format('truetype');
+  /* Add more formats if needed */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Example of using the font */
+body {
+  font-family: 'NASA', sans-serif;
+}
+
+
+/* Adjust the body and html styles for full height and centering */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #282c34;
+}
+
+/* Style the app container */
+.App {
+  width: 90%; /* Take up 90% of the available width */
+  max-width: 500px; /* Set a maximum width */
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  color: white;
+}
+
+
+
+
+/* Style button and other elements as needed */
+button {
+  background-color: #61dafb;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}

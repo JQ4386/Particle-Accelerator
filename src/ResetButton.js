@@ -1,11 +1,7 @@
 import React from "react"
 
-export default function ResetButton(props) {
-    const handleResetClick = () => {
-        props.setMoney(0);
-    }
-
+export default function ResetButton({ resetStates }) {
     return (
-        <button onClick={handleResetClick}>Reset</button>
+        <button onClick={resetStates}>Reset</button>
     )
 }

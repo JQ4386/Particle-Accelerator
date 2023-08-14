@@ -1,12 +1,9 @@
-import React, {useState} from "react";
+import React from "react";
 
 import UpgradeButton from "./UpgradeButton";
 // import MaxAllButton from "./MaxAllButton";
 
-export default function Upgrade({money, setMoney, baseCost, upgradeName, upgradeEffect, setTotalUpgradeEffect}) {
-
-    const [numUpgrades, setNumUpgrades] = useState(0);
-    const [cost, setCost] = useState(baseCost);
+export default function Upgrade({money, setMoney, numUpgrades, setNumUpgrades, cost, setCost, upgradeName, upgradeEffect, setTotalUpgradeEffect}) {
 
     function handleUpgrade() {
         if (money >= cost) {

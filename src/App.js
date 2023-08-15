@@ -14,39 +14,14 @@ function App() {
     setMoney: setMoney
   }
 
-  const initUpgrades = [{
-    id: 1,
-    name: "Click Upgrade",
-    baseCost: 10,
-    upgradeEffect: 1, //+1 $ per click
-    numOwned: 0, //number of times this upgrade has been purchased
-    tier: 1 //used to classify upgrades for future feature expansion
-  }, {
-    id: 2,
-    name: "Clickier Upgrade",
-    baseCost: 100,
-    upgradeEffect: 10, 
-    numOwned: 0, 
-    tier: 1
-  }, {
-    id: 3,
-    name: "Clickiest Upgrade",
-    baseCost: 1000,
-    upgradeEffect: 100,
-    numOwned: 0,
-    tier: 1
-  }
-]
-
-
-  const [upgrades, setUpgrades] = useState(initUpgrades);
+  const [upgrades, setUpgrades] = useState([]);
 
   // prop object to reduce prop clutter
   
 
   const resetStates = () => {
     setMoney(0);
-    setUpgrades(initUpgrades);
+    setUpgrades([]);
   }
 
 

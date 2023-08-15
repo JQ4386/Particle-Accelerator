@@ -1,27 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Upgrade from "./Upgrade";
 
 export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) {
 
     //at the start there are no upgrades
-    // const [upgradeList, setUpgradeList] = useState([]);
+    //first upgrade shows up when user has >= 10$
+    useEffect(() => {
+        console.log(upgrades)
 
-    //first upgrade shows up when user has > 10$
-    // useEffect(() => {
-    //     if (money >= 10) {
-    //         setUpgradeList(prevUpgrades => {
-    //             return [...prevUpgrades, {
-    //                 id: 1,
-    //                 name: "Click Upgrade",
-    //                 baseCost: 10,
-    //                 upgradeEffect: 1, //+1 $ per click
-    //                 numUpgrades: 0, //number of times this upgrade has been purchased
-    //                 tier: 1, //used to classify upgrades for future feature expansion
-    //             }]
-    //         });
-    //     }
-    // }, [money]);
+        if (money >= 10 && !upgrades.length) {
+            setUpgrades(prevUpgrades => {
+                return [...prevUpgrades, {
+                    id: 1,
+                    name: "Click Upgrade",
+                    baseCost: 10,
+                    upgradeEffect: 1, //+1 $ per click
+                    numOwned: 0, //number of times this upgrade has been purchased
+                    tier: 1, //used to classify upgrades for future feature expansion
+                }]
+            });
+        }
+        if (money >= 100 && upgrades.length === 1) {
+            setUpgrades(prevUpgrades => {
+                return [...prevUpgrades, {
+                    id: 2,
+                    name: "Clickier Upgrade",
+                    baseCost: 100,
+                    upgradeEffect: 10, 
+                    numOwned: 0, 
+                    tier: 1
+                }]
+            });
+        }
+
+        if (money >= 1000 && upgrades.length === 2) {
+            setUpgrades(prevUpgrades => {
+                return [...prevUpgrades, {
+                    id: 3,
+                    name: "Clickiest Upgrade",
+                    baseCost: 1000,
+                    upgradeEffect: 100,
+                    numOwned: 0,
+                    tier: 1
+                }]
+            });
+        }    
+
+    }, [money]);
 
     const upgradeProps = {
         money: money,

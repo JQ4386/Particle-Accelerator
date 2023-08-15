@@ -1,34 +1,32 @@
 import React from "react";
 
-import UpgradeButton from "./UpgradeButton";
-// import MaxAllButton from "./MaxAllButton";
-
-export default function Upgrade({money, setMoney, numUpgrades, setNumUpgrades, cost, setCost, upgradeName, upgradeEffect, setTotalUpgradeEffect}) {
-
-    function handleUpgrade() {
+export default function Upgrade({ money, setMoney, upgrades, setUpgrades, name, cost, numOwned, tier }) {
+    
+    function handleClick() {
         if (money >= cost) {
-            setNumUpgrades(prevNumUpgrades => prevNumUpgrades + 1);
-            
-            // Use the functional form to get the updated numUpgrades
-            setCost(prevCost => {
-                const newCost = prevCost * (1.1 ** (numUpgrades + 1));
-                return Math.ceil(newCost / 5) * 5;
-            });
-            setTotalUpgradeEffect(prevTotalUpgradeEffect => prevTotalUpgradeEffect + upgradeEffect);
-            setMoney(prevMoney => prevMoney - cost);
+            setUpgrades(prevUpgrades => {
+                return prevUpgrades.map(upgrade => {
+                    if (upgrade.name === name) {
+                        return {
+                            ...upgrade,
+                            numOwned: upgrade.numOwned + 1,
+                            cost: Math.ceil(upgrade.baseCost * Math.pow(1.07, upgrade.numOwned))
+                        }
+                    }
+                    return upgrade;
+                })
+            })
 
-            console.log("numUpgrades:" + numUpgrades + " cost:" + cost)
+            setMoney(prevMoney => prevMoney - cost);
+            console.log(upgrades[0])
+            console.log(cost)
         }
     }
-
+    
     return (
         <div>
-            <UpgradeButton 
-                numUpgrades={numUpgrades}
-                cost={cost}
-                name={upgradeName}
-                handleUpgrade={handleUpgrade} />
-            {/* <MaxAllButton {...manageMoney}/> */}
+            <h2>{name} ({numOwned})</h2>
+            <button onClick={handleClick}>Upgrade (${cost})</button>
         </div>
     )
 }

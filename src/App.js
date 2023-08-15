@@ -2,45 +2,62 @@ import React, { useState } from 'react';
 import './App.css';
 import Button from './Button';
 import ResetButton from './ResetButton';
-import Upgrade from './Upgrade';
+import UpgradesTab from './UpgradesTab';
 
 function App() {
-  const [money, setMoney] = useState(0);
-  const [totalUpgradeEffect, setTotalUpgradeEffect] = useState(0);
-  const [numUpgrades, setNumUpgrades] = useState(0);
-  const [cost, setCost] = useState(10);  // Assuming 10 is the initial cost
 
-  // prop object to reduce prop clutter
+  const [money, setMoney] = useState(0);
+
+
   const manageMoney = {
     money: money,
-    setMoney: setMoney,
+    setMoney: setMoney
   }
+
+  const initUpgrades = [{
+    id: 1,
+    name: "Click Upgrade",
+    baseCost: 10,
+    upgradeEffect: 1, //+1 $ per click
+    numOwned: 0, //number of times this upgrade has been purchased
+    tier: 1 //used to classify upgrades for future feature expansion
+  }, {
+    id: 2,
+    name: "Clickier Upgrade",
+    baseCost: 100,
+    upgradeEffect: 10, 
+    numOwned: 0, 
+    tier: 1
+  }, {
+    id: 3,
+    name: "Clickiest Upgrade",
+    baseCost: 1000,
+    upgradeEffect: 100,
+    numOwned: 0,
+    tier: 1
+  }
+]
+
+
+  const [upgrades, setUpgrades] = useState(initUpgrades);
+
+  // prop object to reduce prop clutter
+  
 
   const resetStates = () => {
     setMoney(0);
-    setTotalUpgradeEffect(0);
-    setNumUpgrades(0);
-    setCost(10);  // Reset to the initial cost
+    setUpgrades(initUpgrades);
   }
+
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Arcade Clicker</h1>
         <p>Money: ${money}</p>
-        <Button {...manageMoney} totalUpgradeEffect={totalUpgradeEffect} />
+        <Button {...manageMoney} upgrades={upgrades} />
         <ResetButton resetStates={resetStates} />
-        <Upgrade
-          {...manageMoney}
-          numUpgrades={numUpgrades}
-          setNumUpgrades={setNumUpgrades}
-          cost={cost}
-          setCost={setCost}
-          upgradeName={"Upgrade 1"}
-          baseCost={10}
-          upgradeEffect={1}
-          setTotalUpgradeEffect={setTotalUpgradeEffect}
-        />
+        <UpgradesTab {...manageMoney} upgrades={upgrades} setUpgrades={setUpgrades} />
       </header>
     </div>
   );

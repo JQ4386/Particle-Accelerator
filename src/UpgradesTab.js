@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import Upgrade from "./Upgrade";
 
-export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) {
+export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeData }) {
 
     //at the start there are no upgrades
     //first upgrade shows up when user has >= 10$
@@ -16,30 +16,32 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
                     name: `Clicker Tier ${id}`,
                     baseCost: baseCost,
                     upgradeEffect: 1 * (10 ** (id - 1)),
+                    effectType: "money",
                     numOwned: 0,
-                    tier: 1,
                     unlockMoney: baseCost,
                     type: "active"
                 };
             } else {
                 // Passive Autoclicker Upgrades (IDs starting from 11)
                 const baseCost = 10 * (10 ** (id - 11));
+                const effectType = id === 11 ? 'money' : `tier${id - 11}auto`; 
                 return {
                     id: id,
                     name: `Auto Tier ${id - 10}`,
                     baseCost: baseCost,
-                    upgradeEffect: 1 * (10 ** (id - 11)),
+                    effectType: effectType,
+                    upgradeEffect: 1,
                     numOwned: 0,
-                    tier: 1,
-                    unlockMoney: baseCost * 1, // Assuming autoclickers are more expensive
+                    unlockMoney: baseCost * 1,
                     type: "passive"
                 };
             }
         };
+        
 
         function determineNextUpgradeId() {
-            const activeCount = upgrades.filter(upg => upg.type === 'active').length;
-            const passiveCount = upgrades.filter(upg => upg.type === 'passive').length;
+            const activeCount = upgradeData.filter(upg => upg.type === 'active').length;
+            const passiveCount = upgradeData.filter(upg => upg.type === 'passive').length;
         
             const nextActiveId = activeCount + 1;
             const nextPassiveId = passiveCount + 11;
@@ -60,32 +62,32 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
     
         const nextUpgradeId = determineNextUpgradeId();
 
-        console.log(upgrades)
+        console.log(upgradeData)
         console.log("Current Money:", money);
         
         // Only attempt to add an upgrade if nextUpgradeId is not null
     if (nextUpgradeId) {
         const nextUpgrade = generateUpgrade(nextUpgradeId);
         if (money >= nextUpgrade.unlockMoney) {
-            setUpgrades(prevUpgrades => {
+            setUpgradeData(prevUpgrades => {
                 return [...prevUpgrades, nextUpgrade];
             });
         }
     }
     
-    }, [money, setUpgrades, upgrades]);
+    }, [money, setUpgradeData, upgradeData]);
     
 
     const upgradeProps = {
         money: money,
         setMoney: setMoney,
-        upgrades: upgrades,
-        setUpgrades: setUpgrades
+        upgradeData: upgradeData,
+        setUpgradeData: setUpgradeData
     }
 
     function calculateCost(id) {
-        const cost = upgrades.find(upgrade => upgrade.id === id)?.baseCost;
-        const owned = upgrades.find(upgrade => upgrade.id === id)?.numOwned;
+        const cost = upgradeData.find(upgrade => upgrade.id === id)?.baseCost;
+        const owned = upgradeData.find(upgrade => upgrade.id === id)?.numOwned;
         return Math.ceil(cost * Math.pow(1.25, owned));
     }
 
@@ -94,7 +96,7 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
         <div className="upgrade-container">
             <div className="upgrade-column">
                 <h2>Active Upgrades</h2>
-                {upgrades.filter(upg => upg.type === 'active').map((upgrade) => (
+                {upgradeData.filter(upg => upg.type === 'active').map((upgrade) => (
                     <Upgrade 
                         {...upgradeProps} 
                         key={upgrade.id} 
@@ -107,7 +109,7 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
             </div>
             <div className="upgrade-column">
                 <h2>Passive Upgrades</h2>
-                {upgrades.filter(upg => upg.type === 'passive').map((upgrade) => (
+                {upgradeData.filter(upg => upg.type === 'passive').map((upgrade) => (
                     <Upgrade 
                         {...upgradeProps} 
                         key={upgrade.id} 

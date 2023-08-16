@@ -1,10 +1,10 @@
 import React from "react";
 
-export default function Upgrade({ money, setMoney, upgrades, setUpgrades, name, cost, numOwned, tier }) {
+export default function Upgrade({ money, setMoney, upgradeData, setUpgradeData, name, cost, numOwned, tier }) {
     
     function handleClick() {
         if (money >= cost) {
-            setUpgrades(prevUpgrades => {
+            setUpgradeData(prevUpgrades => {
                 return prevUpgrades.map(upgrade => {
                     if (upgrade.name === name) {
                         return {
@@ -22,7 +22,7 @@ export default function Upgrade({ money, setMoney, upgrades, setUpgrades, name, 
     
     return (
         <div>
-            <h3>{name} ({numOwned})</h3>
+            <h3>{name} ({Math.floor(numOwned)})</h3>
             <button onClick={handleClick}>Upgrade (${cost})</button>
         </div>
     )

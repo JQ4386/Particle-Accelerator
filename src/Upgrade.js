@@ -16,16 +16,13 @@ export default function Upgrade({ money, setMoney, upgrades, setUpgrades, name, 
                     return upgrade;
                 })
             })
-
             setMoney(prevMoney => prevMoney - cost);
-            console.log(upgrades[0])
-            console.log(cost)
         }
     }
     
     return (
         <div>
-            <h2>{name} ({numOwned})</h2>
+            <h3>{name} ({numOwned})</h3>
             <button onClick={handleClick}>Upgrade (${cost})</button>
         </div>
     )

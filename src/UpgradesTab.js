@@ -6,48 +6,75 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
 
     //at the start there are no upgrades
     //first upgrade shows up when user has >= 10$
-    useEffect(() => {
-        console.log(upgrades)
-
-        if (money >= 10 && !upgrades.length) {
-            setUpgrades(prevUpgrades => {
-                return [...prevUpgrades, {
-                    id: 1,
-                    name: "Click Upgrade",
-                    baseCost: 10,
-                    upgradeEffect: 1, //+1 $ per click
-                    numOwned: 0, //number of times this upgrade has been purchased
-                    tier: 1, //used to classify upgrades for future feature expansion
-                }]
-            });
-        }
-        if (money >= 100 && upgrades.length === 1) {
-            setUpgrades(prevUpgrades => {
-                return [...prevUpgrades, {
-                    id: 2,
-                    name: "Clickier Upgrade",
-                    baseCost: 100,
-                    upgradeEffect: 10, 
-                    numOwned: 0, 
-                    tier: 1
-                }]
-            });
-        }
-
-        if (money >= 1000 && upgrades.length === 2) {
-            setUpgrades(prevUpgrades => {
-                return [...prevUpgrades, {
-                    id: 3,
-                    name: "Clickiest Upgrade",
-                    baseCost: 1000,
-                    upgradeEffect: 100,
+    useEffect(() => {    
+        function generateUpgrade(id) {
+            if (id <= 10) {
+                // Active Click Upgrades (IDs 1-10)
+                const baseCost = 10 * (10 ** (id - 1));
+                return {
+                    id: id,
+                    name: `Clicker Tier ${id}`,
+                    baseCost: baseCost,
+                    upgradeEffect: 1 * (10 ** (id - 1)),
                     numOwned: 0,
-                    tier: 1
-                }]
-            });
-        }    
+                    tier: 1,
+                    unlockMoney: baseCost,
+                    type: "active"
+                };
+            } else {
+                // Passive Autoclicker Upgrades (IDs starting from 11)
+                const baseCost = 10 * (10 ** (id - 11));
+                return {
+                    id: id,
+                    name: `Auto Tier ${id - 10}`,
+                    baseCost: baseCost,
+                    upgradeEffect: 1 * (10 ** (id - 11)),
+                    numOwned: 0,
+                    tier: 1,
+                    unlockMoney: baseCost * 1, // Assuming autoclickers are more expensive
+                    type: "passive"
+                };
+            }
+        };
 
-    }, [money]);
+        function determineNextUpgradeId() {
+            const activeCount = upgrades.filter(upg => upg.type === 'active').length;
+            const passiveCount = upgrades.filter(upg => upg.type === 'passive').length;
+        
+            const nextActiveId = activeCount + 1;
+            const nextPassiveId = passiveCount + 11;
+        
+            // If the next active upgrade can be unlocked, return its ID
+            if (nextActiveId <= 6 && money >= generateUpgrade(nextActiveId).unlockMoney) {
+                return nextActiveId;
+            }
+            // If the next passive upgrade can be unlocked, return its ID
+            else if (nextPassiveId <= 16 && money >= generateUpgrade(nextPassiveId).unlockMoney) {
+                return nextPassiveId;
+            }
+        
+            return null; // No new upgrades available
+        }
+        
+        
+    
+        const nextUpgradeId = determineNextUpgradeId();
+
+        console.log(upgrades)
+        console.log("Current Money:", money);
+        
+        // Only attempt to add an upgrade if nextUpgradeId is not null
+    if (nextUpgradeId) {
+        const nextUpgrade = generateUpgrade(nextUpgradeId);
+        if (money >= nextUpgrade.unlockMoney) {
+            setUpgrades(prevUpgrades => {
+                return [...prevUpgrades, nextUpgrade];
+            });
+        }
+    }
+    
+    }, [money, setUpgrades, upgrades]);
+    
 
     const upgradeProps = {
         money: money,
@@ -63,22 +90,35 @@ export default function UpgradesTab({ money, setMoney, upgrades, setUpgrades }) 
     }
 
 
-
-
     return (
-        <div>
-            {/* <Upgrade {...upgradeProps} name={upgrades[0].name} cost={calculateCost(1)} numOwned={upgrades[0].numOwned} tier={upgrades[0].tier} /> */}
-            {upgrades.map((upgrade) => (
-                <Upgrade 
-                    {...upgradeProps} 
-                    key={upgrade.id} 
-                    name={upgrade.name} 
-                    cost={calculateCost(upgrade.id)} 
-                    numOwned={upgrade.numOwned} 
-                    tier={upgrade.tier} 
-                />
-            ))}
-            
+        <div className="upgrade-container">
+            <div className="upgrade-column">
+                <h2>Active Upgrades</h2>
+                {upgrades.filter(upg => upg.type === 'active').map((upgrade) => (
+                    <Upgrade 
+                        {...upgradeProps} 
+                        key={upgrade.id} 
+                        name={upgrade.name} 
+                        cost={calculateCost(upgrade.id)} 
+                        numOwned={upgrade.numOwned} 
+                        tier={upgrade.tier} 
+                    />
+                ))}
+            </div>
+            <div className="upgrade-column">
+                <h2>Passive Upgrades</h2>
+                {upgrades.filter(upg => upg.type === 'passive').map((upgrade) => (
+                    <Upgrade 
+                        {...upgradeProps} 
+                        key={upgrade.id} 
+                        name={upgrade.name} 
+                        cost={calculateCost(upgrade.id)} 
+                        numOwned={upgrade.numOwned} 
+                        tier={upgrade.tier} 
+                    />
+                ))}
+            </div>
         </div>
     )
+    
 }

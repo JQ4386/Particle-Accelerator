@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Button from './Button';
 import ResetButton from './ResetButton';
 import UpgradesTab from './UpgradesTab';
+import ParticleBox from './ParticleBox';
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
   const [moneyPerSecond, setMoneyPerSecond] = useState(0);
   const [upgradeData, setUpgradeData] = useState([]);
 
-  const refreshRate = 10;
+  const refreshRate = 60;
 
   // prop object to reduce prop clutter
   const manageMoney = {
@@ -59,9 +59,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Neon Incremental</h1>
+        <h1>Particle Accelerator</h1>
         <p>Money: ${money.toFixed(2)} (${moneyPerSecond}/s)</p>
-        <Button {...manageMoney} upgradeData={upgradeData} />
+        <ParticleBox {...manageMoney} refreshRate={refreshRate} />
         <ResetButton resetStates={resetStates} />
         <UpgradesTab {...manageMoney} upgradeData={upgradeData} setUpgradeData={setUpgradeData} />
       </header>

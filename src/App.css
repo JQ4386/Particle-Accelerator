@@ -32,6 +32,10 @@ body, html {
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -66,3 +70,14 @@ button {
   color: #4ebdd6;
 }
 
+.particle-box {
+  margin: auto;
+  margin-bottom: 20px; 
+  border-radius: 2%;
+  position: relative; 
+  overflow: hidden; 
+}
+
+.particle {
+  border-radius: 50%; /* Makes the particle round */
+}

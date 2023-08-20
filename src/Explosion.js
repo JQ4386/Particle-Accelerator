@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import gsap, { Power4 } from "gsap";
 
 export default function Explosion({ size, onComplete = () => {}, style, color, position }) {

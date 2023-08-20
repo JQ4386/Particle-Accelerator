@@ -9,28 +9,27 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
     useEffect(() => {    
         function generateUpgrade(id) {
             if (id <= 10) {
-                // Active Click Upgrades (IDs 1-10)
+                // Wall Upgrades (IDs 1-10)
                 const baseCost = 10 * (10 ** (id - 1));
                 return {
                     id: id,
-                    name: `Clicker Tier ${id}`,
+                    name: `Better Walls Tier ${id}`,
                     baseCost: baseCost,
                     upgradeEffect: 1 * (10 ** (id - 1)),
-                    effectType: "money",
+                    effectType: "wall",
                     numOwned: 0,
                     unlockMoney: baseCost,
                     type: "active"
                 };
             } else {
-                // Passive Autoclicker Upgrades (IDs starting from 11)
+                // Particle Speed Upgrades (IDs starting from 11)
                 const baseCost = 10 * (10 ** (id - 11));
-                const effectType = id === 11 ? 'money' : `tier${id - 11}auto`; 
                 return {
                     id: id,
                     name: `Auto Tier ${id - 10}`,
                     baseCost: baseCost,
-                    effectType: effectType,
-                    upgradeEffect: 1,
+                    effectType: "particleSpeed",
+                    upgradeEffect: 1 * (2 ** (id - 11)),
                     numOwned: 0,
                     unlockMoney: baseCost * 1,
                     type: "passive"
@@ -62,8 +61,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
     
         const nextUpgradeId = determineNextUpgradeId();
 
-        console.log(upgradeData)
-        console.log("Current Money:", money);
+
         
         // Only attempt to add an upgrade if nextUpgradeId is not null
     if (nextUpgradeId) {

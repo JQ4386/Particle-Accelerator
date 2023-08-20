@@ -59,7 +59,7 @@ button {
 }
 
 .upgrade-column {
-  width: 48%; /* slightly less than 50% to allow some space between columns */
+  width: 43%; /* slightly less than 50% to allow some space between columns */
   border: 1px solid #4ebdd6;
   padding: 10px;
   border-radius: 5px;

@@ -3,14 +3,22 @@ import React, { useState, useEffect } from "react";
 import Explosion from "./Explosion";
 
 
-export default function ParticleBox({ money, setMoney, refreshRate }) {
+export default function ParticleBox({ money, setMoney, refreshRate, wallValue, particleSpeed }) {
     const boxSize = 300;
     const particleSize = 15;
     const [position, setPosition] = useState({ x: boxSize / 2, y: boxSize / 2 }); // initialize in center of box
-    const [velocity, setVelocity] = useState({ x: 4, y: 6 });
+    const [velocity, setVelocity] = useState({ x: 2, y: 3 });
 
     // Explosion states
     const [explosions, setExplosions] = useState([]);
+
+    // Parse particleSpeed from integer to Object
+    useEffect(() => {
+        setVelocity(prevVelocity => ({
+            x: particleSpeed * 2/5 * Math.sign(prevVelocity.x), 
+            y: particleSpeed * 3/5 * Math.sign(prevVelocity.y)}) )
+        console.log(particleSpeed)
+      }, [particleSpeed]);
 
 
     useEffect(() => {
@@ -33,9 +41,7 @@ export default function ParticleBox({ money, setMoney, refreshRate }) {
                 };
 
                 setExplosions(prev => [...prev, newExplosion]);
-
-                console.log(explosions)
-                setMoney(prevMoney => prevMoney + 1);
+                setMoney(prevMoney => prevMoney + wallValue);
             }
 
 
@@ -57,7 +63,7 @@ export default function ParticleBox({ money, setMoney, refreshRate }) {
         }, 1000 / refreshRate); // once every frame
 
         return () => clearInterval(interval); // cleanup
-    }, [position, velocity, setMoney, refreshRate]);
+    }, [position, velocity, setMoney, explosions, refreshRate, wallValue]);
 
     return (
         <div className="particle-box" style={{

@@ -17,6 +17,7 @@ export default function Upgrade({ money, setMoney, upgradeData, setUpgradeData, 
                 })
             })
             setMoney(prevMoney => prevMoney - cost);
+            console.log(upgradeData)
         }
     }
     

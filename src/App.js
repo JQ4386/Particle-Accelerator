@@ -79,7 +79,7 @@ function App() {
         tempPS += upgrade.upgradeEffect * upgrade.numOwned;
       }
     });
-    setParticleSpeed(prevPS => tempPS)
+    setParticleSpeed(tempPS)
   }, [upgradeData]);
 
 

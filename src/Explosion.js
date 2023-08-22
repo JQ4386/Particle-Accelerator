@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import gsap, { Power4 } from "gsap";
 
 export default function Explosion({ size, onComplete = () => {}, style, color, position }) {
@@ -30,11 +30,14 @@ export default function Explosion({ size, onComplete = () => {}, style, color, p
     }, []);
 
     return (
+
         <svg
             width={size}
             height={size}
-            style={{ ...style, position: "absolute", left: `${position.x - (size / 2)}px`, 
-            top: `${position.y - (size / 2)}px`  }}
+            style={{
+                ...style, position: "absolute", left: `${position.x - (size / 2)}px`,
+                top: `${position.y - (size / 2)}px`
+            }}
         >
             <circle
                 cx={center}

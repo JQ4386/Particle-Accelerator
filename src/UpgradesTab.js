@@ -19,14 +19,14 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                     effectType: "wall",
                     numOwned: 0,
                     unlockMoney: baseCost,
-                    type: "active"
+                    type: "passive" // To Accomodate Future Active Upgrades
                 };
             } else {
                 // Particle Speed Upgrades (IDs starting from 11)
                 const baseCost = 10 * (10 ** (id - 11));
                 return {
                     id: id,
-                    name: `Auto Tier ${id - 10}`,
+                    name: `Faster Tier ${id - 10}`,
                     baseCost: baseCost,
                     effectType: "particleSpeed",
                     upgradeEffect: 1 * (2 ** (id - 11)),
@@ -39,30 +39,26 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
         
 
         function determineNextUpgradeId() {
-            const activeCount = upgradeData.filter(upg => upg.type === 'active').length;
-            const passiveCount = upgradeData.filter(upg => upg.type === 'passive').length;
+            const wallUpCount = upgradeData.filter(upg => upg.effectType === 'wall').length;
+            const particleSpeedUpCount = upgradeData.filter(upg => upg.effectType === 'particleSpeed').length;
         
-            const nextActiveId = activeCount + 1;
-            const nextPassiveId = passiveCount + 11;
+            const nextWallUpId = wallUpCount + 1;
+            const nextParticleSpeedId = particleSpeedUpCount + 11;
         
             // If the next active upgrade can be unlocked, return its ID
-            if (nextActiveId <= 6 && money >= generateUpgrade(nextActiveId).unlockMoney) {
-                return nextActiveId;
+            if (nextWallUpId <= 6 && money >= generateUpgrade(nextWallUpId).unlockMoney) {
+                return nextWallUpId;
             }
-            // If the next passive upgrade can be unlocked, return its ID
-            else if (nextPassiveId <= 16 && money >= generateUpgrade(nextPassiveId).unlockMoney) {
-                return nextPassiveId;
+            // If the next passive upgrade can be unlocked, return its IDnextParticleSpeedId
+            else if (nextParticleSpeedId <= 16 && money >= generateUpgrade(nextParticleSpeedId).unlockMoney) {
+                return nextParticleSpeedId;
             }
         
             return null; // No new upgrades available
         }
         
-        
-    
         const nextUpgradeId = determineNextUpgradeId();
 
-
-        
         // Only attempt to add an upgrade if nextUpgradeId is not null
     if (nextUpgradeId) {
         const nextUpgrade = generateUpgrade(nextUpgradeId);
@@ -75,7 +71,6 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
     
     }, [money, setUpgradeData, upgradeData]);
     
-
     const upgradeProps = {
         money: money,
         setMoney: setMoney,
@@ -93,8 +88,8 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
     return (
         <div className="upgrade-container">
             <div className="upgrade-column">
-                <h2>Active Upgrades</h2>
-                {upgradeData.filter(upg => upg.type === 'active').map((upgrade) => (
+                <h2>Wall Upgrades</h2>
+                {upgradeData.filter(upg => upg.effectType === 'wall').map((upgrade) => (
                     <Upgrade 
                         {...upgradeProps} 
                         key={upgrade.id} 
@@ -106,8 +101,8 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 ))}
             </div>
             <div className="upgrade-column">
-                <h2>Passive Upgrades</h2>
-                {upgradeData.filter(upg => upg.type === 'passive').map((upgrade) => (
+                <h2>Speed Upgrades</h2>
+                {upgradeData.filter(upg => upg.effectType === 'particleSpeed').map((upgrade) => (
                     <Upgrade 
                         {...upgradeProps} 
                         key={upgrade.id} 

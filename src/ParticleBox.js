@@ -44,8 +44,6 @@ export default function ParticleBox({ money, setMoney, refreshRate, wallValue, p
                 setMoney(prevMoney => prevMoney + wallValue);
             }
 
-
-
             // Bounce off the walls
             if (newX < 0 || newX + particleSize >= boxSize) {
                 setVelocity(prevVelocity => {
@@ -77,7 +75,8 @@ export default function ParticleBox({ money, setMoney, refreshRate, wallValue, p
                 <Explosion
                     key={explosion.id}
                     size={100}
-                    color={"white"}
+                    color={"red"}
+                    refreshRate = {refreshRate}
                     position={explosion}
                     onComplete={() => {
                         setExplosions(prev => prev.filter(e => e.id !== explosion.id));
@@ -92,9 +91,6 @@ export default function ParticleBox({ money, setMoney, refreshRate, wallValue, p
                 left: position.x,
                 top: position.y
             }}></div>
-
-
-
         </div>
     );
 }

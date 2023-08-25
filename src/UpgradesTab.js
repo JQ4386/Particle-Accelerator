@@ -6,7 +6,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
 
     //at the start there are no upgrades
     //first upgrade shows up when user has >= 10$
-    useEffect(() => {    
+    useEffect(() => {
         function generateUpgrade(id) {
             if (id <= 10) {
                 // Wall Upgrades (IDs 1-10)
@@ -21,8 +21,8 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                     unlockMoney: baseCost,
                     type: "passive" // To Accomodate Future Active Upgrades
                 };
-            } else {
-                // Particle Speed Upgrades (IDs starting from 11)
+            } else if (id <= 20) {
+                // Particle Speed Upgrades (IDs starting from 11-20)
                 const baseCost = 10 * (10 ** (id - 11));
                 return {
                     id: id,
@@ -31,46 +31,66 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                     effectType: "particleSpeed",
                     upgradeEffect: 1 * (2 ** (id - 11)),
                     numOwned: 0,
-                    unlockMoney: baseCost * 1,
+                    unlockMoney: baseCost,
+                    type: "passive"
+                };
+            } else if (id <= 30) {
+                //Particle Amount Upgrades (IDs starting from 21-30)
+                const baseCost = 10 * (10 ** (id - 21));
+                return {
+                    id: id,
+                    name: `More Particles Tier ${id - 20}`,
+                    baseCost: baseCost,
+                    effectType: "particleAmount",
+                    upgradeEffect: 1 * (2 ** (id - 21)),
+                    numOwned: 0,
+                    unlockMoney: baseCost,
                     type: "passive"
                 };
             }
         };
-        
 
-        function determineNextUpgradeId() {
+
+        function determineNextUpgradeID() {
             const wallUpCount = upgradeData.filter(upg => upg.effectType === 'wall').length;
             const particleSpeedUpCount = upgradeData.filter(upg => upg.effectType === 'particleSpeed').length;
-        
-            const nextWallUpId = wallUpCount + 1;
-            const nextParticleSpeedId = particleSpeedUpCount + 11;
-        
-            // If the next active upgrade can be unlocked, return its ID
-            if (nextWallUpId <= 6 && money >= generateUpgrade(nextWallUpId).unlockMoney) {
-                return nextWallUpId;
+            const particleAmountCount = upgradeData.filter(upg => upg.effectType === 'particleAmount').length;
+
+            const nextWallUpID = wallUpCount + 1;
+            const nextParticleSpeedID = particleSpeedUpCount + 11;
+            const nextParticleAmountID = particleAmountCount + 21;
+
+            // If the next wall upgrade can be unlocked, return its ID
+            if (nextWallUpID <= 6 && money >= generateUpgrade(nextWallUpID).unlockMoney) {
+                return nextWallUpID;
             }
-            // If the next passive upgrade can be unlocked, return its IDnextParticleSpeedId
-            else if (nextParticleSpeedId <= 16 && money >= generateUpgrade(nextParticleSpeedId).unlockMoney) {
-                return nextParticleSpeedId;
+            // If the next particleSpeed upgrade can be unlocked, return its ID
+            else if (nextParticleSpeedID <= 16 && money >= generateUpgrade(nextParticleSpeedID).unlockMoney) {
+                return nextParticleSpeedID;
             }
-        
-            return null; // No new upgrades available
+
+            else if (nextParticleAmountID <= 26 && money >= generateUpgrade(nextParticleAmountID).unlockMoney) {
+                return nextParticleAmountID;
+            }
+
+
+                return null; // No new upgrades available
         }
-        
-        const nextUpgradeId = determineNextUpgradeId();
+
+        const nextUpgradeID = determineNextUpgradeID();
 
         // Only attempt to add an upgrade if nextUpgradeId is not null
-    if (nextUpgradeId) {
-        const nextUpgrade = generateUpgrade(nextUpgradeId);
-        if (money >= nextUpgrade.unlockMoney) {
-            setUpgradeData(prevUpgrades => {
-                return [...prevUpgrades, nextUpgrade];
-            });
+        if (nextUpgradeID) {
+            const nextUpgrade = generateUpgrade(nextUpgradeID);
+            if (money >= nextUpgrade.unlockMoney) {
+                setUpgradeData(prevUpgrades => {
+                    return [...prevUpgrades, nextUpgrade];
+                });
+            }
         }
-    }
-    
+
     }, [money, setUpgradeData, upgradeData]);
-    
+
     const upgradeProps = {
         money: money,
         setMoney: setMoney,
@@ -90,30 +110,40 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
             <div className="upgrade-column">
                 <h2>Wall Upgrades</h2>
                 {upgradeData.filter(upg => upg.effectType === 'wall').map((upgrade) => (
-                    <Upgrade 
-                        {...upgradeProps} 
-                        key={upgrade.id} 
-                        name={upgrade.name} 
-                        cost={calculateCost(upgrade.id)} 
-                        numOwned={upgrade.numOwned} 
-                        tier={upgrade.tier} 
+                    <Upgrade
+                        {...upgradeProps}
+                        key={upgrade.id}
+                        name={upgrade.name}
+                        cost={calculateCost(upgrade.id)}
+                        numOwned={upgrade.numOwned}
                     />
                 ))}
             </div>
             <div className="upgrade-column">
                 <h2>Speed Upgrades</h2>
                 {upgradeData.filter(upg => upg.effectType === 'particleSpeed').map((upgrade) => (
-                    <Upgrade 
-                        {...upgradeProps} 
-                        key={upgrade.id} 
-                        name={upgrade.name} 
-                        cost={calculateCost(upgrade.id)} 
-                        numOwned={upgrade.numOwned} 
-                        tier={upgrade.tier} 
+                    <Upgrade
+                        {...upgradeProps}
+                        key={upgrade.id}
+                        name={upgrade.name}
+                        cost={calculateCost(upgrade.id)}
+                        numOwned={upgrade.numOwned}
+                    />
+                ))}
+            </div>
+            <div className="upgrade-column">
+                <h2>More Particles</h2>
+                {upgradeData.filter(upg => upg.effectType === 'particleAmount').map((upgrade) => (
+                    <Upgrade
+                        {...upgradeProps}
+                        key={upgrade.id}
+                        name={upgrade.name}
+                        cost={calculateCost(upgrade.id)}
+                        numOwned={upgrade.numOwned}
                     />
                 ))}
             </div>
         </div>
     )
-    
+
 }

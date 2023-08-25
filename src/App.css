@@ -21,12 +21,13 @@ body, html {
   justify-content: center;
   align-items: center;
   background-color: #282c34;
+  user-select: none;
 }
 
 /* Style the app container */
 .App {
   width: 90%; /* Take up 90% of the available width */
-  max-width: 500px; /* Set a maximum width */
+  max-width: 600px; /* Set a maximum width */
   padding: 20px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.6);
@@ -59,7 +60,7 @@ button {
 }
 
 .upgrade-column {
-  width: 43%; /* slightly less than 50% to allow some space between columns */
+  width: 28%; /* slightly less than 33% to allow some space between columns */
   border: 1px solid #4ebdd6;
   padding: 10px;
   border-radius: 5px;

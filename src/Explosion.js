@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import gsap, { Power4 } from "gsap";
 
 export default function Explosion({ size, onComplete = () => {}, style, color, position }) {
@@ -27,6 +27,7 @@ export default function Explosion({ size, onComplete = () => {}, style, color, p
             );
 
         return () => timeline.kill();
+        // eslint-disable-next-line 
     }, []);
 
     return (

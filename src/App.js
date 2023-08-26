@@ -137,10 +137,10 @@ function App() {
   const moneyRef = useRef(money);
   const wallValueRef = useRef(wallValue);
   const particleSpeedRef = useRef(particleSpeed);
-  const upgradeDataRef = useRef(upgradeData);  
+  const upgradeDataRef = useRef(upgradeData);
   const lastAddedParticlesRef = useRef(lastAddedParticles);
   const particleDataRef = useRef(particleData);
-  
+
   // useEffect to update useRef values
   useEffect(() => {
     moneyRef.current = money;
@@ -155,11 +155,11 @@ function App() {
   const saveGameState = useCallback(() => {
     const gameState = {
       money: moneyRef.current,
-        wallValue: wallValueRef.current,
-        particleSpeed: particleSpeedRef.current,
-        upgradeData: upgradeDataRef.current,
-        particleData: particleDataRef.current,
-        lastAddedParticles: lastAddedParticlesRef.current
+      wallValue: wallValueRef.current,
+      particleSpeed: particleSpeedRef.current,
+      upgradeData: upgradeDataRef.current,
+      particleData: particleDataRef.current,
+      lastAddedParticles: lastAddedParticlesRef.current
     };
 
     localStorage.setItem('particleAcceleratorState', JSON.stringify(gameState));
@@ -226,7 +226,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Particle Accelerator</h1>
+        <div id="bg"></div>
+        <h1 className="title-gradient">Particle Accelerator</h1>
         <p>Money: ${money.toFixed(2)} </p>
         <ParticleBox {...manageMoney} {...manageParticles} {...manageParticleBox} refreshRate={refreshRate} wallValue={wallValue} particleSpeed={particleSpeed} getRandomColor={getRandomColor} />
         <ResetButton resetStates={resetStates} />

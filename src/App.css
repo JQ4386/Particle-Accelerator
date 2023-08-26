@@ -1,33 +1,55 @@
 @font-face {
   font-family: 'NASA';
   src: url('../src/fonts/nasalization-rg.otf') format('truetype');
-  /* Add more formats if needed */
   font-weight: normal;
   font-style: normal;
 }
 
-/* Example of using the font */
 body {
   font-family: 'NASA', sans-serif;
 }
 
-
-/* Adjust the body and html styles for full height and centering */
+/* transparent div */
 body, html {
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #282c34;
   user-select: none;
 }
 
-/* Style the app container */
+/* fancy locally animated background */
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #0a0a12, #11111a, #191923, #201e2b, #28283a, #302f48, #383757, #3f4065);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  z-index: -10;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
 .App {
-  width: 90%; /* Take up 90% of the available width */
-  max-width: 800px; /* Set a maximum width */
+  width: 90%;
+  max-width: 800px;
   padding: 20px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.6);
@@ -39,18 +61,114 @@ body, html {
   align-items: center;
 }
 
+.App h1 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+@keyframes gradientAnimation {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+.title-gradient {
+  background: linear-gradient(45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  animation: gradientAnimation 20s ease infinite; 
+}
 
 
 
-/* Style button and other elements as needed */
 button {
-  background-color: #4ebdd6;
-  border: none;
+  background-color: #000000;
+  border: 1.5px solid #ffffff;
   padding: 10px 20px;
   color: white;
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
+  font-weight: bold;
+}
+
+/* Animation for Buttons */
+button:hover {
+  background-color: #ffffff;
+  color: #000000;
+  transition: 0.3s;
+}
+
+/* indented click */
+button:active {
+  background-color: #ffffff;
+  color: #000000;
+  transition: 0.1s;
+  transform: translateY(2px);
+}
+
+.upgrade-column:nth-child(1) button {
+  background-color: #4ebdd6;
+  border: none;
+}
+
+.upgrade-column:nth-child(2) button {
+  background-color: #ff0000;
+  border: none;
+}
+
+.upgrade-column:nth-child(3) button {
+  background-color: #32CD32;
+  border: none;
+}
+
+.upgrade-column:nth-child(1) button:hover {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.3s;
+}
+
+.upgrade-column:nth-child(2) button:hover {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.3s;
+}
+
+.upgrade-column:nth-child(3) button:hover {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.3s;
+}
+
+.upgrade-column:nth-child(1) button:active {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.1s;
+  transform: translateY(2px);
+}
+
+.upgrade-column:nth-child(2) button:active {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.1s;
+  transform: translateY(2px);
+}
+
+.upgrade-column:nth-child(3) button:active {
+  background-color: #ffffff;
+  color: #000;
+  transition: 0.1s;
+  transform: translateY(2px);
 }
 
 .upgrade-container {
@@ -59,26 +177,51 @@ button {
   margin: 20px;
 }
 
+.upgrade-column:nth-child(1) {
+  border-color: #4ebdd6;
+}
+
+.upgrade-column:nth-child(2) {
+  border-color: #ff0000;
+}
+
+.upgrade-column:nth-child(3) {
+  border-color: #32CD32;
+}
+
 .upgrade-column {
-  width: 29%; /* slightly less than 33% to allow some space between columns */
-  border: 1px solid #4ebdd6;
+  width: 29%;
+  border: 2px solid;
   padding: 10px;
   border-radius: 5px;
+  padding-bottom: 25px;
+  padding-top: 0px;
 }
 
 .upgrade-column h2 {
   text-align: center;
+}
+
+.upgrade-column:nth-child(1) h2 {
   color: #4ebdd6;
+}
+
+.upgrade-column:nth-child(2) h2 {
+  color: #ff0000;
+}
+
+.upgrade-column:nth-child(3) h2 {
+  color: #32CD32;
 }
 
 .particle-box {
   margin: auto;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   border-radius: 2%;
-  position: relative; 
-  overflow: hidden; 
+  position: relative;
+  overflow: hidden;
 }
 
 .particle {
-  border-radius: 50%; /* Makes the particle round */
+  border-radius: 50%;
 }

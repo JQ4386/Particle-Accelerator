@@ -252,7 +252,7 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
         <div className="particle-box" style={{
             width: boxSize,
             height: boxSize,
-            border: '10px solid white',
+            border: '5px solid white',
             position: 'relative'
         }}>
             {explosions.map(explosion =>

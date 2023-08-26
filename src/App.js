@@ -10,7 +10,7 @@ function App() {
 
   // Initial Game Constants
   const initMoney = 0;
-  const initWallValue = 10;
+  const initWallValue = 1;
   const initParticleSpeed = 5;
   const initUpgradeData = useMemo(() => [], []);
   const initBoxSize = 300; // For future use

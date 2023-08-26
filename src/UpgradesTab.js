@@ -61,11 +61,12 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
             const nextParticleAmountID = particleAmountCount + 21;
 
             // If the next wall upgrade can be unlocked, return its ID
-            if (nextWallUpID <= 6 && money >= generateUpgrade(nextWallUpID).unlockMoney) {
+            // nextWallUpID, nextParticleSpeedID, nextParticleAmountID are temp values to restrict the number of upgrades for porotype, expand later
+            if (nextWallUpID <= 1 && money >= generateUpgrade(nextWallUpID).unlockMoney) {
                 return nextWallUpID;
             }
             // If the next particleSpeed upgrade can be unlocked, return its ID
-            else if (nextParticleSpeedID <= 16 && money >= generateUpgrade(nextParticleSpeedID).unlockMoney) {
+            else if (nextParticleSpeedID <= 11 && money >= generateUpgrade(nextParticleSpeedID).unlockMoney) {
                 return nextParticleSpeedID;
             }
 

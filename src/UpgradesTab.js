@@ -26,7 +26,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 const baseCost = 10 * (10 ** (id - 11));
                 return {
                     id: id,
-                    name: `Faster Tier ${id - 10}`,
+                    name: `Increase Speed Tier ${id - 10}`,
                     baseCost: baseCost,
                     effectType: "particleSpeed",
                     upgradeEffect: 1 * (2 ** (id - 11)),

@@ -10,7 +10,7 @@ function App() {
 
   // Initial Game Constants
   const initMoney = 0;
-  const initWallValue = 1;
+  const initWallValue = 5;
   const initParticleSpeed = 5;
   const initUpgradeData = [];
   const initBoxSize = 300;
@@ -24,17 +24,26 @@ function App() {
   const [boxSize, setBoxSize] = useState(initBoxSize);
   const [particleSize, setParticleSize] = useState(initParticleSize);
 
+  // generate random velocity vector for new particles based on particleSpeed
+  function getRandomVelocity(s) {
+    const theta = Math.random() * 2 * Math.PI; // random angle in radians
+    return {
+      x: s * Math.cos(theta),
+      y: s * Math.sin(theta)
+    };
+  }
+
   // Initial Particle Data
   const initParticleData = [{
     id: Date.now(),
     position: { x: boxSize / 2, y: boxSize / 2 },
-    velocity: { x: 2, y: 3 }
+    velocity: getRandomVelocity(particleSpeed)
   }];
 
   const [particleData, setParticleData] = useState(initParticleData);
 
 
-  const refreshRate = 60;
+  const refreshRate = 30;
 
   function resetStates() {
     setMoney(initMoney);
@@ -83,21 +92,44 @@ function App() {
     if (diff > 0) {
       const newParticles = [];
       for (let i = 0; i < diff; i++) {
+        const newVelocity = getRandomVelocity(particleSpeed);
         newParticles.push({
           id: nanoid(),  // Ensure unique IDs
           position: { x: boxSize / 2, y: boxSize / 2 },
-          velocity: { x: 2, y: 3 }
+          velocity: newVelocity
         });
       }
-      console.log(newParticles);
       setParticleData(prevParticles => [...prevParticles, ...newParticles]);
       setLastAddedParticles(addedParticles);
     }
 
-  }, [upgradeData, boxSize, lastAddedParticles]);
+  }, [upgradeData, boxSize, lastAddedParticles, particleSpeed, particleData]);
 
+  // adjusting particleSpeed based on speed upgrades
+  function adjustVelocity(velocity, newSpeed) {
+    const magnitude = Math.sqrt(velocity.x ** 2 + velocity.y ** 2);
+    return {
+      x: (velocity.x / magnitude) * newSpeed,
+      y: (velocity.y / magnitude) * newSpeed
+    };
+  }
 
+  useEffect(() => {
+    const adjustedParticles = particleData.map(particle => {
+      return {
+        ...particle,
+        velocity: adjustVelocity(particle.velocity, particleSpeed)
+      };
+    });
 
+    setParticleData(adjustedParticles);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [particleSpeed]);
+
+  // handle particleData after particle collisions
+  function handleParticlesUpdate(updatedParticles) {
+    setParticleData(updatedParticles);
+  }
 
   // prop object to reduce prop clutter
   const manageMoney = {
@@ -119,7 +151,8 @@ function App() {
     boxSize: boxSize,
     setBoxSize: setBoxSize,
     particleSize: particleSize,
-    setParticleSize: setParticleSize
+    setParticleSize: setParticleSize,
+    handleParticlesUpdate: handleParticlesUpdate
   }
 
 

@@ -130,13 +130,9 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
             });
             if (collisions.length === 0) return updatedParticles;
 
-            var collisionCount = 0;
             collisions.forEach(([particleA, particleB]) => {
                 resolveCollision(particleA, particleB);
-                collisionCount++;
             });
-            console.log(`Collisions: ${collisionCount} Resolved!`)
-            collisionCount = 0;
             return updatedParticles;
         }
 
@@ -251,7 +247,6 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
 
     // Explosion State 
     const [explosions, setExplosions] = useState([]);
-
 
     return (
         <div className="particle-box" style={{

@@ -42,9 +42,7 @@ function App() {
   }], [boxSize, particleSpeed]);
   const [particleData, setParticleData] = useState(initParticleData);
 
-
-  const refreshRate = 30;
-
+  const refreshRate = 30; // Frames per second
 
   //handle wall upgrades 
   useEffect(() => {

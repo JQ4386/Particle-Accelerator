@@ -13,7 +13,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 const baseCost = 10 * (10 ** (id - 1));
                 return {
                     id: id,
-                    name: `Better Walls Tier ${id}`,
+                    name: `Walls Tier ${id}`,
                     baseCost: baseCost,
                     upgradeEffect: 1 * (10 ** (id - 1)),
                     effectType: "wall",
@@ -26,7 +26,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 const baseCost = 10 * (10 ** (id - 11));
                 return {
                     id: id,
-                    name: `Increase Speed Tier ${id - 10}`,
+                    name: `Speed Tier ${id - 10}`,
                     baseCost: baseCost,
                     effectType: "particleSpeed",
                     upgradeEffect: 1 * (2 ** (id - 11)),
@@ -39,7 +39,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 const baseCost = 10 * (10 ** (id - 21));
                 return {
                     id: id,
-                    name: `More Particles Tier ${id - 20}`,
+                    name: `More Particles`,
                     baseCost: baseCost,
                     effectType: "particleAmount",
                     upgradeEffect: 1 * (2 ** (id - 21)),
@@ -69,7 +69,7 @@ export default function UpgradesTab({ money, setMoney, upgradeData, setUpgradeDa
                 return nextParticleSpeedID;
             }
 
-            else if (nextParticleAmountID <= 26 && money >= generateUpgrade(nextParticleAmountID).unlockMoney) {
+            else if (nextParticleAmountID <= 21 && money >= generateUpgrade(nextParticleAmountID).unlockMoney) {
                 return nextParticleAmountID;
             }
 

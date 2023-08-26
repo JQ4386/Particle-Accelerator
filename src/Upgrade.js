@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Upgrade({ money, setMoney, upgradeData, setUpgradeData, name, cost, numOwned }) {
+export default function Upgrade({ money, setMoney, setUpgradeData, name, cost, numOwned }) {
     
     function handleClick() {
         if (money >= cost) {
@@ -17,7 +17,6 @@ export default function Upgrade({ money, setMoney, upgradeData, setUpgradeData, 
                 })
             })
             setMoney(prevMoney => prevMoney - cost);
-            console.log(upgradeData)
         }
     }
     

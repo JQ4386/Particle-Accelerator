@@ -5,7 +5,7 @@ import Explosion from "./Explosion";
 import Particle from "./Particle";
 
 
-export default function ParticleBox({ setMoney, refreshRate, wallValue, particleSpeed, particleData, handleParticlesUpdate, boxSize, particleSize }) {
+export default function ParticleBox({ setMoney, refreshRate, wallValue, particleSpeed, particleData, handleParticlesUpdate, boxSize, particleSize, getRandomColor }) {
 
     const [interpParticles, setInterpParticles] = useState(new Map());
 
@@ -197,11 +197,12 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
                     }
                 }
 
-                function handleCollision(collisionPosition) {
+                function handleCollision(collisionPosition, collisionColor) {
                     const newExplosion = {
                         x: collisionPosition.x,
                         y: collisionPosition.y,
-                        id: nanoid()
+                        id: nanoid(),
+                        color: collisionColor
                     };
 
                     setExplosions(prev => [...prev, newExplosion]);
@@ -218,7 +219,7 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
                         newX = boxSize - particleSize;
                     }
 
-                    handleCollision(particle.position);
+                    handleCollision(particle.position, particle.color);
                 }
 
                 if (newY < 0 || newY + particleSize >= boxSize) {
@@ -232,7 +233,7 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
                     }
 
 
-                    handleCollision(particle.position);
+                    handleCollision(particle.position, particle.color);
                 }
 
                 return {
@@ -246,10 +247,11 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
         }, 1000 / refreshRate);
 
         return () => clearInterval(interval);
-    }, [particleData, refreshRate, interpParticles, boxSize, handleParticlesUpdate, particleSize, setMoney, wallValue]);
+    }, [particleData, refreshRate, interpParticles, boxSize, handleParticlesUpdate, particleSize, setMoney, wallValue, getRandomColor]);
 
-    // Explosion states
+    // Explosion State 
     const [explosions, setExplosions] = useState([]);
+
 
     return (
         <div className="particle-box" style={{
@@ -262,7 +264,7 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
                 <Explosion
                     key={explosion.id}
                     size={100}
-                    color={"red"}
+                    color={explosion.color}
                     refreshRate={refreshRate}
                     position={explosion}
                     onComplete={() => {
@@ -278,6 +280,7 @@ export default function ParticleBox({ setMoney, refreshRate, wallValue, particle
                         velocity={particle.velocity}
                         particleSize={particleSize}
                         boxSize={boxSize}
+                        color={particle.color}
                     />
                 )}
             </div>

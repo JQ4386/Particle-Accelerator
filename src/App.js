@@ -37,7 +37,8 @@ function App() {
   const initParticleData = useMemo(() => [{
     id: Date.now(),
     position: { x: boxSize / 2, y: boxSize / 2 },
-    velocity: getRandomVelocity(particleSpeed)
+    velocity: getRandomVelocity(particleSpeed),
+    color: 'rgb(25, 255, 155)'
   }], [boxSize, particleSpeed]);
   const [particleData, setParticleData] = useState(initParticleData);
 
@@ -70,6 +71,14 @@ function App() {
   // handle particle amount upgrades
   const [lastAddedParticles, setLastAddedParticles] = useState(0);
 
+  // generate random color for new particles
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 200) + 55;
+    const g = Math.floor(Math.random() * 200) + 55;
+    const b = Math.floor(Math.random() * 200) + 55;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
   useEffect(() => {
     let addedParticles = 0;
 
@@ -88,7 +97,8 @@ function App() {
         newParticles.push({
           id: nanoid(),  // Ensure unique IDs
           position: { x: boxSize / 2, y: boxSize / 2 },
-          velocity: newVelocity
+          velocity: newVelocity,
+          color: getRandomColor()
         });
       }
       setParticleData(prevParticles => [...prevParticles, ...newParticles]);
@@ -220,7 +230,7 @@ function App() {
       <header className="App-header">
         <h1>Particle Accelerator</h1>
         <p>Money: ${money.toFixed(2)} </p>
-        <ParticleBox {...manageMoney} {...manageParticles} {...manageParticleBox} refreshRate={refreshRate} wallValue={wallValue} particleSpeed={particleSpeed} />
+        <ParticleBox {...manageMoney} {...manageParticles} {...manageParticleBox} refreshRate={refreshRate} wallValue={wallValue} particleSpeed={particleSpeed} getRandomColor={getRandomColor} />
         <ResetButton resetStates={resetStates} />
         <UpgradesTab {...manageMoney} {...manageUpgrade} {...manageParticles} {...manageParticleBox} />
       </header>

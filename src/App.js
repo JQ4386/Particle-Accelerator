@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { nanoid } from 'nanoid';
 
 import './App.css';
@@ -10,11 +10,11 @@ function App() {
 
   // Initial Game Constants
   const initMoney = 0;
-  const initWallValue = 5;
+  const initWallValue = 10;
   const initParticleSpeed = 5;
-  const initUpgradeData = [];
-  const initBoxSize = 300;
-  const initParticleSize = 15;
+  const initUpgradeData = useMemo(() => [], []);
+  const initBoxSize = 300; // For future use
+  const initParticleSize = 15; // For future use
 
   // Initialize Game States
   const [money, setMoney] = useState(initMoney);
@@ -34,24 +34,16 @@ function App() {
   }
 
   // Initial Particle Data
-  const initParticleData = [{
+  const initParticleData = useMemo(() => [{
     id: Date.now(),
     position: { x: boxSize / 2, y: boxSize / 2 },
     velocity: getRandomVelocity(particleSpeed)
-  }];
-
+  }], [boxSize, particleSpeed]);
   const [particleData, setParticleData] = useState(initParticleData);
 
 
   const refreshRate = 30;
 
-  function resetStates() {
-    setMoney(initMoney);
-    setUpgradeData(initUpgradeData);
-    setWallValue(initWallValue);
-    setParticleSpeed(initParticleSpeed);
-    setParticleData(initParticleData)
-  }
 
   //handle wall upgrades 
   useEffect(() => {
@@ -129,6 +121,73 @@ function App() {
   // handle particleData after particle collisions
   function handleParticlesUpdate(updatedParticles) {
     setParticleData(updatedParticles);
+  }
+
+  // Saving and Loading Game State
+
+  // useRef to store previous game states
+  const moneyRef = useRef(money);
+  const wallValueRef = useRef(wallValue);
+  const particleSpeedRef = useRef(particleSpeed);
+  const upgradeDataRef = useRef(upgradeData);  
+  const lastAddedParticlesRef = useRef(lastAddedParticles);
+  const particleDataRef = useRef(particleData);
+  
+  // useEffect to update useRef values
+  useEffect(() => {
+    moneyRef.current = money;
+    wallValueRef.current = wallValue;
+    particleSpeedRef.current = particleSpeed;
+    upgradeDataRef.current = upgradeData;
+    lastAddedParticlesRef.current = lastAddedParticles;
+    particleDataRef.current = particleData;
+  }, [money, wallValue, particleSpeed, upgradeData, lastAddedParticles, particleData]);
+
+  // Save Game State
+  const saveGameState = useCallback(() => {
+    const gameState = {
+      money: moneyRef.current,
+        wallValue: wallValueRef.current,
+        particleSpeed: particleSpeedRef.current,
+        upgradeData: upgradeDataRef.current,
+        particleData: particleDataRef.current,
+        lastAddedParticles: lastAddedParticlesRef.current
+    };
+
+    localStorage.setItem('particleAcceleratorState', JSON.stringify(gameState));
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, []); // no dependencies because only save game state based on interval
+
+  // Autosave Game State
+  useEffect(() => {
+    const interval = setInterval(saveGameState, 5000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, []); // no dependencies because only save game state based on interval
+
+  // Load Game State
+  useEffect(() => {
+    const savedState = localStorage.getItem('particleAcceleratorState');
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      setMoney(parsedState.money || initMoney);
+      setWallValue(parsedState.wallValue || initWallValue);
+      setParticleSpeed(parsedState.particleSpeed || initParticleSpeed);
+      setUpgradeData(parsedState.upgradeData || initUpgradeData);
+      setParticleData(parsedState.particleData || initParticleData);
+      setLastAddedParticles(parsedState.lastAddedParticles || 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Hard Reset (Game States to Initial Values)
+  function resetStates() {
+    setMoney(initMoney);
+    setUpgradeData(initUpgradeData);
+    setWallValue(initWallValue);
+    setParticleSpeed(initParticleSpeed);
+    setParticleData(initParticleData)
+    setLastAddedParticles(0);
   }
 
   // prop object to reduce prop clutter
